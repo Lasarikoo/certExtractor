@@ -1,8 +1,7 @@
 
 # 🔐 CertExtractor
 
-CertExtractor es un script en Python que permite **extraer claves públicas, privadas y certificados** desde archivos `.pfx` o `.p12`, incluso si están cifrados con algoritmos antiguos como `RC2-40-CBC`.  
-Funciona correctamente con certificados utilizados por entidades como los Mossos d'Esquadra de Catalunya.
+CertExtractor es un script en Python que permite **extraer claves públicas, privadas y certificados** desde archivos `.pfx` o `.p12`, incluso si están cifrados con algoritmos antiguos como `RC2-40-CBC`.
 
 ---
 
@@ -29,7 +28,7 @@ Durante la instalación marca la opción:
 ## 📁 Estructura del proyecto
 
 ```
-TicketMaster/
+certExtractor-main
 ├── CertExtractor.py              ← Script principal
 ├── openssl_legacy.cnf            ← Config para activar el módulo legacy
 ├── installers/
