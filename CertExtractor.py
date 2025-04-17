@@ -120,3 +120,6 @@ def extract_cert():
     abrir = input("\n¿Quieres abrir la carpeta ahora? (s/n): ").strip().lower()
     if abrir == "s":
         subprocess.run(["explorer", output_dir], shell=True)
+
+if __name__ == "__main__":
+    extract_cert()
