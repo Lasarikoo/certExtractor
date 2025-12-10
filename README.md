@@ -89,30 +89,30 @@ ruta de salida (`cert_output/`).
 
 ## ❗ Limitaciones actuales
 
--   No valida fechas de vigencia, cadena de confianza ni emisores.\
+-   No valida fechas de vigencia, cadena de confianza ni emisores.
 -   No acepta argumentos tipo `--input` o `--password` (solo interacción
-    por consola).\
--   No genera logs externos (solo salida por consola).\
+    por consola).
+-   No genera logs externos (solo salida por consola).
 -   No exporta a otros formatos más allá de PEM.
 
 ## 🏭 Casos de uso recomendados
 
 CertExtractor se utiliza en contextos como:
 
--   Configurar cámaras ALPR (Tattile, Axis, Vaxtor, etc.).\
--   Integraciones con Mossos vía WS-Security.\
--   Conversión de certificados municipales para enviadores SOAP.\
--   Preparación de certificados para sistemas como **TattileSender**.\
+-   Configurar cámaras ALPR (Tattile, Axis, Vaxtor, etc.).
+-   Integraciones con Mossos vía WS-Security.
+-   Conversión de certificados municipales para enviadores SOAP.
+-   Preparación de certificados para sistemas como **TattileSender**.
 -   Procesos empresariales donde se reciben certificados heredados o
     cifrados.
 
 ## 🧭 Roadmap
 
 -   [ ] Añadir CLI completo con flags (`--input`, `--output`,
-    `--password`).\
--   [ ] Validación opcional del certificado (vigencia, emisor, cadena).\
--   [ ] Exportación a DER, CRT y PKCS8.\
--   [ ] Sistema de logs estructurados.\
+    `--password`).
+-   [ ] Validación opcional del certificado (vigencia, emisor, cadena).
+-   [ ] Exportación a DER, CRT y PKCS8.
+-   [ ] Sistema de logs estructurados.
 -   [ ] Modo silencioso para automatizaciones CI/CD.
 
 ## 📝 Licencia
