@@ -21,6 +21,15 @@ a partir de un archivo **.pfx / .p12**, usando exclusivamente
 No valida vigencia ni confianza del certificado: su propósito es
 **extraer** y **convertir**.
 
+## ⚠️ Disclaimer IMPORTANTE
+
+Para que el script funcione correctamente en Windows:
+
+**El instalador de OpenSSL (`Win64OpenSSL_Full-3_0_16.exe`) debe estar obligatoriamente dentro de la carpeta `installers/` ubicada en el directorio raíz del proyecto.**
+
+CertExtractor intentará ejecutar este instalador automáticamente si OpenSSL no está disponible en el sistema.  
+Si el archivo no está en la ruta correcta, la auto-instalación fallará.
+
 ## 🚀 Características
 
 ✔ Compatible con certificados antiguos (RC2-40-CBC, TripleDES, etc.)\
