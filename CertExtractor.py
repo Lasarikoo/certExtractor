@@ -106,14 +106,15 @@ def extract_cert():
     run_openssl([
         "openssl", "pkcs12", "-legacy", "-in", pfx_path,
         "-out", os.path.join(output_dir, "privpub.pem"),
-        "-passin", f"pass:{pfx_pass}"
+        "-passin", f"pass:{pfx_pass}",
+        "-passout", f"pass:{pfx_pass}"
     ], "Legacy: Certificado completo (privpub.pem)")
 
     run_openssl([
         "openssl", "x509", "-inform", "pem", "-in",
         os.path.join(output_dir, "privpub.pem"),
         "-pubkey", "-out", os.path.join(output_dir, "key-pub.pem"),
-        "-outform", "pem"
+        "-outform", "pem", "-passin", f"pass:{pfx_pass}"
     ], "Clave pública (key-pub.pem)")
 
     run_openssl([
