@@ -18,7 +18,7 @@ def show_banner():
     print(r"""
 ╔════════════════════════════════════════════════════════════╗
 ║            🛡️  Extractor de Certificados PFX  🛡️           ║
-║      Autor: Lázaro Beltrán García | Alphanet Solutions     ║
+║          Lázaro Beltrán García | Alphanet Solutions        ║
 ╚════════════════════════════════════════════════════════════╝
 """)
 
@@ -148,5 +148,6 @@ def extract_cert():
 
 if __name__ == "__main__":
     extract_cert()
+
 
 
