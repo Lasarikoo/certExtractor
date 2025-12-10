@@ -75,10 +75,11 @@ def extract_cert():
     if not check_openssl():
         return
 
-    pfx_path = input("Ruta del archivo .pfx: ").strip().strip('"')
-    if not os.path.isfile(pfx_path):
-        print("❌ El archivo no existe.")
-        return
+    while True:
+        pfx_path = input("Ruta del archivo .pfx: ").strip().strip('"')
+        if os.path.isfile(pfx_path):
+            break
+        print("❌ El archivo no existe. Por favor, introduce una ruta válida.")
 
     pfx_dir = os.path.dirname(pfx_path)
     pfx_pass = input("Introduce el PIN del certificado (contraseña): ").strip()
