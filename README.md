@@ -1,115 +1,125 @@
+# CertExtractor 🛠️🔐
 
-# 🔐 CertExtractor
+Extractor automático de certificados y claves desde archivos
+**.pfx/.p12**, compatible incluso con certificados antiguos cifrados con
+algoritmos como **RC2-40-CBC**. Diseñado para despliegues industriales y
+sistemas ALPR (TattileSender, VaxALPR On Camera, integraciones SOAP,
+etc.).
 
-CertExtractor es un script en Python que permite **extraer claves públicas, privadas y certificados** desde archivos `.pfx` o `.p12`, incluso si están cifrados con algoritmos antiguos como `RC2-40-CBC`.
+## 📘 Descripción general
 
----
+**CertExtractor** es una herramienta en Python que automatiza la
+extracción de:
 
-## ✅ Requisitos
+-   **Clave privada cifrada** (`cert-priv.pem`)
+-   **Clave privada sin cifrar** (`key.pem`)
+-   **Clave pública** (`key-pub.pem`)
+-   **Certificado completo** (`privpub.pem`)
 
-### 1. Python 3.8 o superior
-Instálalo desde: https://www.python.org/downloads/
+a partir de un archivo **.pfx / .p12**, usando exclusivamente
+**OpenSSL** mediante `subprocess.run`.\
+No valida vigencia ni confianza del certificado: su propósito es
+**extraer** y **convertir**.
 
-### 2. OpenSSL 3.0.0 o superior (NO usar versiones "Light")
-Necesitas una instalación **completa** de OpenSSL que incluya soporte para el **módulo `legacy`**.
+## 🚀 Características
 
-Puedes usar el instalador oficial:
+✔ Compatible con certificados antiguos (RC2-40-CBC, TripleDES, etc.)\
+✔ Extrae claves y certificados en formato PEM\
+✔ Interfaz sencilla por consola (sin flags)\
+✔ Sin dependencias externas de Python (solo stdlib + OpenSSL)\
+✔ Requiere OpenSSL 3.x con `legacy provider`\
+✔ Auto-instalación de OpenSSL en Windows mediante instalador incluido\
+✔ Enfoque práctico para entornos ALPR y sistemas empresariales
 
-🔗 https://slproweb.com/products/Win32OpenSSL.html  
-➡️ Descarga: **Win64 OpenSSL v3.0.16 (Full)**
+## 📦 Archivos generados
 
-Durante la instalación marca la opción:
-```
-✅ Add OpenSSL to the system PATH for all users
-```
+El script crea una carpeta `cert_output/` junto al archivo de entrada.
+Dentro encontrarás:
 
----
+  Archivo           Descripción
+  ----------------- -------------------------------------
+  `cert-priv.pem`   Clave privada cifrada
+  `key.pem`         Clave privada sin cifrar
+  `key-pub.pem`     Clave pública extraída
+  `privpub.pem`     Certificado completo en formato PEM
 
-## 📁 Estructura del proyecto
+## 🛠️ Requisitos
 
-```
-certExtractor-main
-├── CertExtractor.py              ← Script principal
-├── openssl_legacy.cnf            ← Config para activar el módulo legacy
-├── installers/
-│   ├── Win64OpenSSL_Full-3_0_16.exe  ← Instalador (opcional)
-│   └── legacy/
-│       ├── bin/
-│       ├── include/
-│       └── lib/
-│           └── ossl-modules/
-│               └── legacy.dll   ← Módulo legacy requerido por OpenSSL
-```
+### Python
 
----
+-   Python **3.8+**
 
-## ⚙️ Configuración automática
+### OpenSSL
 
-CertExtractor se encargará de:
-- Activar la configuración `openssl_legacy.cnf` automáticamente
-- Establecer la ruta al módulo `legacy.dll`
-- Ejecutar los comandos de extracción con `openssl -legacy`
+-   OpenSSL **3.x**
+-   Debe incluirse el proveedor heredado (`legacy`) para soportar
+    cifrados como RC2-40-CBC.
 
----
+### Windows
 
-## 🧪 ¿Cómo saber si todo está bien configurado?
+Si no existe OpenSSL en el sistema, el script intenta ejecutar el
+instalador incluido:
 
-Abre una terminal nueva y escribe:
+    installers/Win64OpenSSL_Full-3_0_16.exe
 
-```bash
-openssl version
-```
+## ▶️ Uso
 
-Debe mostrar algo como:
+Ejecutar desde consola:
 
-```
-OpenSSL 3.0.16 ...
-```
-
-Y también asegúrate de que tienes este archivo:
-
-```
-installers/legacy/lib/ossl-modules/legacy.dll
-```
-
----
-
-## 🚀 Uso
-
-Ejecuta el script:
-
-```bash
+``` bash
 python CertExtractor.py
 ```
 
-Luego:
-1. Introduce la ruta completa del archivo `.pfx`
-2. Introduce la contraseña o PIN
-3. El script extraerá:
-   - `cert-priv.pem` → Clave privada
-   - `key.pem` → Clave sin cifrar
-   - `key-pub.pem` → Clave pública
-   - `privpub.pem` → Certificado combinado
-4. Todos los archivos se guardan en una carpeta `cert_output` junto al `.pfx`
-5. Al final puedes abrir la carpeta automáticamente
+El programa solicitará:
 
----
+1.  Ruta del archivo `.pfx` / `.p12`
+2.  Contraseña del certificado
 
-## ⚠️ Errores comunes
+Al finalizar, se mostrará un resumen con los archivos generados y la
+ruta de salida (`cert_output/`).
 
-### ❌ Error: "unsupported algorithm RC2-40-CBC"
-➡️ No tienes el proveedor legacy activado o `legacy.dll` no está presente.
+## 📁 Estructura del repositorio
 
-### ❌ Error: "unable to load provider legacy"
-➡️ Asegúrate de que la variable `OPENSSL_MODULES` apunta correctamente a `ossl-modules`.
-   - Si ejecutas el script desde otra carpeta, se usa la ruta relativa al propio script, pero
-     necesitas que exista `installers/legacy/lib/ossl-modules/legacy.dll` junto al ejecutable.
-   - Si falta ese archivo, vuelve a copiar la carpeta `installers/legacy` completa o reinstala OpenSSL (versión Full).
+    certExtractor/
+    │
+    ├─ CertExtractor.py          # Script principal
+    ├─ installers/               # Instalador de OpenSSL para Windows
+    │   └─ Win64OpenSSL_Full-3_0_16.exe
+    └─ README.md
 
----
+## ❗ Limitaciones actuales
 
-## 📌 Extras
+-   No valida fechas de vigencia, cadena de confianza ni emisores.\
+-   No acepta argumentos tipo `--input` o `--password` (solo interacción
+    por consola).\
+-   No genera logs externos (solo salida por consola).\
+-   No exporta a otros formatos más allá de PEM.
 
-El script también es capaz de instalar automáticamente OpenSSL si se encuentra el instalador dentro de la carpeta `installers`.
+## 🏭 Casos de uso recomendados
 
----
+CertExtractor se utiliza en contextos como:
+
+-   Configurar cámaras ALPR (Tattile, Axis, Vaxtor, etc.).\
+-   Integraciones con Mossos vía WS-Security.\
+-   Conversión de certificados municipales para enviadores SOAP.\
+-   Preparación de certificados para sistemas como **TattileSender**.\
+-   Procesos empresariales donde se reciben certificados heredados o
+    cifrados.
+
+## 🧭 Roadmap
+
+-   [ ] Añadir CLI completo con flags (`--input`, `--output`,
+    `--password`).\
+-   [ ] Validación opcional del certificado (vigencia, emisor, cadena).\
+-   [ ] Exportación a DER, CRT y PKCS8.\
+-   [ ] Sistema de logs estructurados.\
+-   [ ] Modo silencioso para automatizaciones CI/CD.
+
+## 📝 Licencia
+
+Distribuido bajo licencia **MIT**.
+
+## 👤 Autor
+
+**Lázaro Beltrán García (Lasarikoo)**\
+Automatización ALPR · Backend Python · Integraciones SOAP/REST
