@@ -17,7 +17,7 @@ INSTALLER_PATH = os.path.join(BASE_DIR, "installers", "Win64OpenSSL_Full-3_0_16.
 def show_banner():
     print(r"""
 ╔════════════════════════════════════════════════════════════╗
-║            🛡️  Extractor de Certificados PFX  🛡️          ║
+║            🛡️  Extractor de Certificados PFX  🛡️           ║
 ║      Autor: Lázaro Beltrán García | Alphanet Solutions     ║
 ╚════════════════════════════════════════════════════════════╝
 """)
@@ -148,4 +148,5 @@ def extract_cert():
 
 if __name__ == "__main__":
     extract_cert()
+
 
