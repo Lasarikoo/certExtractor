@@ -102,6 +102,9 @@ Luego:
 
 ### ❌ Error: "unable to load provider legacy"
 ➡️ Asegúrate de que la variable `OPENSSL_MODULES` apunta correctamente a `ossl-modules`.
+   - Si ejecutas el script desde otra carpeta, se usa la ruta relativa al propio script, pero
+     necesitas que exista `installers/legacy/lib/ossl-modules/legacy.dll` junto al ejecutable.
+   - Si falta ese archivo, vuelve a copiar la carpeta `installers/legacy` completa o reinstala OpenSSL (versión Full).
 
 ---
 

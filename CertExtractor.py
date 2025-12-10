@@ -3,17 +3,21 @@ import subprocess
 import shutil
 import time
 
-# Configuración obligatoria para OpenSSL con legacy provider
-os.environ["OPENSSL_CONF"] = os.path.abspath("openssl_legacy.cnf")
-os.environ["OPENSSL_MODULES"] = os.path.abspath("installers/legacy/lib/ossl-modules")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-INSTALLER_PATH = os.path.join("installers", "Win64OpenSSL_Full-3_0_16.exe")
+# Configuración obligatoria para OpenSSL con legacy provider
+OPENSSL_CONF_PATH = os.path.join(BASE_DIR, "openssl_legacy.cnf")
+OPENSSL_MODULES_PATH = os.path.join(BASE_DIR, "installers", "legacy", "lib", "ossl-modules")
+os.environ["OPENSSL_CONF"] = OPENSSL_CONF_PATH
+os.environ["OPENSSL_MODULES"] = OPENSSL_MODULES_PATH
+
+INSTALLER_PATH = os.path.join(BASE_DIR, "installers", "Win64OpenSSL_Full-3_0_16.exe")
 
 def try_manual_openssl_path():
     paths = [
         r"C:\Program Files\OpenSSL-Win64\bin",
         r"C:\OpenSSL-Win64\bin",
-        os.path.abspath("installers/legacy/bin")
+        os.path.join(BASE_DIR, "installers", "legacy", "bin")
     ]
     for path in paths:
         candidate = os.path.join(path, "openssl.exe")
@@ -23,6 +27,10 @@ def try_manual_openssl_path():
     return False
 
 def check_openssl():
+    if not os.path.isdir(OPENSSL_MODULES_PATH):
+        print("⚠️ Ruta del provider legacy no encontrada:", OPENSSL_MODULES_PATH)
+        print("   Verifica que el instalador 'installers/legacy' está completo y vuelve a ejecutar.")
+
     openssl_path = shutil.which("openssl")
     if openssl_path:
         try:
