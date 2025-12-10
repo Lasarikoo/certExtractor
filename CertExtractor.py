@@ -13,6 +13,15 @@ os.environ["OPENSSL_MODULES"] = OPENSSL_MODULES_PATH
 
 INSTALLER_PATH = os.path.join(BASE_DIR, "installers", "Win64OpenSSL_Full-3_0_16.exe")
 
+
+def show_banner():
+    print(r"""
+╔════════════════════════════════════════════════════════════╗
+║            🛡️  Extractor de Certificados PFX  🛡️            ║
+║      Autor: Lázaro Beltrán García | Alphanet Solutions      ║
+╚════════════════════════════════════════════════════════════╝
+""")
+
 def try_manual_openssl_path():
     paths = [
         r"C:\Program Files\OpenSSL-Win64\bin",
@@ -68,17 +77,18 @@ def check_openssl():
         return False
 
 def run_openssl(args, description):
-    print(f"👉 Ejecutando: {' '.join(args)}")
+    print(f"✨ {description} en progreso...")
     try:
         subprocess.run(args, check=True)
-        print(f"✅ {description}")
+        print(f"✅ {description} completada")
         return True
     except subprocess.CalledProcessError as e:
         print(f"❌ Error en '{description}': {e}")
         return False
 
 def extract_cert():
-    print("\n🔐 EXTRACTOR DE CERTIFICADOS PFX")
+    show_banner()
+    print("🚀 Preparando el viaje para liberar tus certificados...")
 
     if not check_openssl():
         return
@@ -94,22 +104,26 @@ def extract_cert():
     output_dir = os.path.join(pfx_dir, "cert_output")
     os.makedirs(output_dir, exist_ok=True)
 
-    print("📦 Extrayendo certificados en:", output_dir)
+    print("📂 Los certificados se guardarán en:", output_dir)
+    print("🎵 Abriendo la caja fuerte digital y separando las piezas...")
 
     # Usamos directamente openssl con -legacy y -passin
+    print("🧩 Separando la clave privada para que puedas firmar con estilo...")
     run_openssl([
         "openssl", "pkcs12", "-legacy", "-in", pfx_path,
         "-nocerts", "-out", os.path.join(output_dir, "cert-priv.pem"),
         "-nodes", "-passin", f"pass:{pfx_pass}"
-    ], "Legacy: Clave privada (cert-priv.pem)")
+    ], "Clave privada (cert-priv.pem)")
 
+    print("📜 Preparando el certificado completo, como un pergamino digital...")
     run_openssl([
         "openssl", "pkcs12", "-legacy", "-in", pfx_path,
         "-out", os.path.join(output_dir, "privpub.pem"),
         "-passin", f"pass:{pfx_pass}",
         "-passout", f"pass:{pfx_pass}"
-    ], "Legacy: Certificado completo (privpub.pem)")
+    ], "Certificado completo (privpub.pem)")
 
+    print("🔑 Forjando la clave pública para compartir sin revelar secretos...")
     run_openssl([
         "openssl", "x509", "-inform", "pem", "-in",
         os.path.join(output_dir, "privpub.pem"),
@@ -117,11 +131,12 @@ def extract_cert():
         "-outform", "pem", "-passin", f"pass:{pfx_pass}"
     ], "Clave pública (key-pub.pem)")
 
+    print("🛡️ Generando una copia de la clave sin cifrar para integraciones especiales...")
     run_openssl([
         "openssl", "pkcs12", "-legacy", "-in", pfx_path,
         "-nocerts", "-out", os.path.join(output_dir, "key.pem"),
         "-nodes", "-passin", f"pass:{pfx_pass}"
-    ], "Legacy: Clave sin cifrar (key.pem)")
+    ], "Clave sin cifrar (key.pem)")
 
     print(f"\n✅ Certificados extraídos en la carpeta: {output_dir}")
     for file in os.listdir(output_dir):
